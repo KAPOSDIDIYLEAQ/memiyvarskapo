@@ -1,5 +1,11 @@
 <!doctype html>
 <html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>კაპოს</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="კაპოს">
+<meta property="og:description" content="შენთვისაა.">
+<meta property="og:image" content="preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="preview.jpg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@500;800&family=Noto+Serif+Georgian:wght@400;600&display=swap">
 <style id="css">
 /* Layout: one narrow column, a segmented red progress bar, sharp-edged black/white buttons, photos as white-framed prints under the message. */
@@ -82,7 +88,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 <script id="code">
 const state = JSON.parse(document.getElementById("state").textContent);
 const app = document.getElementById("app");
-app.innerHTML = '<main><div class="top"><div class="dots" id="dots" aria-hidden="true"><span></span><span></span><span></span><span></span></div><button class="link" id="editBtn" hidden>შეცვლა</button></div><div id="stage"></div></main>';
+app.innerHTML = '<main><div class="top"><div class="dots" id="dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><button class="link" id="editBtn" hidden>შეცვლა</button></div><div id="stage"></div></main>';
 const stage = document.getElementById("stage");
 const dots = [...document.querySelectorAll("#dots span")];
 const editBtn = document.getElementById("editBtn");
@@ -100,10 +106,15 @@ const steps = [
     ["საკმაოდ.", "ეს ნორმალურია. არ ვჩქარობთ."],
     ["ძალიან.", "გასაგებია. არავინ გაგაჩქარებს."],
     ["თითქმის გამიარა.", "მადლობა, რომ მზად ხარ წაიკითხო."] ] },
-  { q: "რა დაგეხმარებოდა ყველაზე მეტად?", label: "კითხვა 3 / 3", opts: [
+  { q: "რა დაგეხმარებოდა ყველაზე მეტად?", label: "კითხვა 3 / 4", opts: [
     ["გულწრფელი ბოდიში.", "სწორედ ეს მოდის შემდეგ."],
     ["დრო და სივრცე.", "შეგიძლია გვერდი დახურო და როცა მოისურვებ, დაბრუნდე."],
-    ["საჭმელი.", "რამე საკიშკაო უნდა გიკისროს."] ] }
+    ["საჭმელი.", "რამე საკიშკაო უნდა გიკისროს."] ] },
+  { q: "დიდი ყლე გაქვს?", label: "კითხვა 4 / 4", opts: [
+    ["კი", "კი."],
+    ["არა", "არა."],
+    ["ძალიან დიდი", "ფეხია მესამე."],
+    ["ძალიან ძალიან დიდი", "გასაგებია."] ] }
 ];
 
 function setDots(n) { dots.forEach((d, k) => d.classList.toggle("on", k <= n)); }
@@ -139,7 +150,7 @@ function ask() {
 }
 
 function ready() {
-  setDots(3);
+  setDots(4);
   stage.innerHTML = `<div class="screen">
     <p class="label">ბოლო ნაბიჯი</p>
     <h2>${state.name ? esc(state.name) + ", ეს" : "ეს"} შენთვისაა.</h2>
@@ -149,7 +160,7 @@ function ready() {
 }
 
 function final() {
-  setDots(3);
+  setDots(4);
   stage.innerHTML = `<div class="screen">
     <div class="paper"><div id="shown">${esc(state.message)}</div></div>
     ${state.photos.length ? `<div class="photos">${state.photos.map(src => `<figure class="ph"><img src="${src}" alt="ფოტო"></figure>`).join("")}</div>` : ""}
@@ -181,7 +192,7 @@ function fileToJpeg(file) {
 function buildDoc(st) {
   const json = JSON.stringify(st).replace(/</g, "\\u003c");
   const font = document.querySelector('link[rel="stylesheet"]').href;
-  return '<!doctype html>\n<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + document.title + '</title><link rel="stylesheet" href="' + font + '"><style id="css">' + document.getElementById("css").textContent + '</style></head><body><div id="app"></div><script type="application/json" id="state">' + json + '</' + 'script><script id="code">' + document.getElementById("code").textContent + '</' + 'script></body></html>';
+  return '<!doctype html>\n<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + document.title + '</title><meta property="og:type" content="website"><meta property="og:title" content="კაპოს"><meta property="og:description" content="შენთვისაა."><meta property="og:image" content="preview.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="preview.jpg"><link rel="stylesheet" href="' + font + '"><style id="css">' + document.getElementById("css").textContent + '</style></head><body><div id="app"></div><script type="application/json" id="state">' + json + '</' + 'script><script id="code">' + document.getElementById("code").textContent + '</' + 'script></body></html>';
 }
 
 function editor() {
